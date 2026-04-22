@@ -15,6 +15,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Mime\Address;
 use T3Monitor\T3monitoring\Domain\Model\Client;
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -98,7 +99,9 @@ class EmailNotification implements LoggerAwareInterface
             $mailMessage->html($htmlContent);
         }
 
-        return $mailMessage->send();
+        $mailer = GeneralUtility::makeInstance(MailerInterface::class);
+        $mailer->send($mailMessage);
+        return $mailer->getSentMessage() !== null;
     }
 
     /**

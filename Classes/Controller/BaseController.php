@@ -20,7 +20,7 @@ use T3Monitor\T3monitoring\Domain\Repository\StatisticRepository;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Registry;
@@ -43,7 +43,7 @@ class BaseController extends ActionController
         protected EmMonitoringConfiguration $emConfiguration
     ) {}
 
-    public function initializeAction(): void
+    protected function initializeAction(): void
     {
         parent::initializeAction();
 
@@ -124,7 +124,7 @@ class BaseController extends ActionController
             $viewButton = $buttonBar->makeLinkButton()
                 ->setTitle($this->getLabel('home'))
                 ->setHref($this->getUriBuilder()->reset()->uriFor('index', [], 'Statistic'))
-                ->setIcon($this->iconFactory->getIcon('actions-view-go-back', Icon::SIZE_SMALL));
+                ->setIcon($this->iconFactory->getIcon('actions-view-go-back', IconSize::SMALL));
             $buttonBar->addButton($viewButton);
         }
 
@@ -139,7 +139,7 @@ class BaseController extends ActionController
         $addUserGroupButton = $buttonBar->makeLinkButton()
             ->setHref((string)$uriBuilder->buildUriFromRoute('record_edit', $parameters))
             ->setTitle($this->getLabel('createNew.client'))
-            ->setIcon($this->iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL));
+            ->setIcon($this->iconFactory->getIcon('actions-document-new', IconSize::SMALL));
         $buttonBar->addButton($addUserGroupButton);
 
         // client single view
@@ -153,14 +153,14 @@ class BaseController extends ActionController
             $editClientButton = $buttonBar->makeLinkButton()
                 ->setHref((string)$uriBuilder->buildUriFromRoute('record_edit', $parameters))
                 ->setTitle($this->getLabel('edit.client'))
-                ->setIcon($this->iconFactory->getIcon('actions-open', Icon::SIZE_SMALL));
+                ->setIcon($this->iconFactory->getIcon('actions-open', IconSize::SMALL));
             $buttonBar->addButton($editClientButton);
 
             // fetch client data
             $downloadClientDataButton = $buttonBar->makeLinkButton()
                 ->setHref($this->getUriBuilder()->reset()->uriFor('fetch', ['client' => $clientId], 'Client'))
                 ->setTitle($this->getLabel('fetchClient.link'))
-                ->setIcon($this->iconFactory->getIcon('actions-system-extension-download', Icon::SIZE_SMALL));
+                ->setIcon($this->iconFactory->getIcon('actions-system-extension-download', IconSize::SMALL));
             $buttonBar->addButton($downloadClientDataButton);
         }
     }

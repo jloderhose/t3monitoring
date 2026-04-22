@@ -272,7 +272,7 @@ class ClientImport extends BaseImport
 
                 $connection = $this->getConnectionTableFor($table);
                 $connection->insert('tx_t3monitoring_domain_model_extension', $insert);
-                $relationId = $connection->lastInsertId('tx_t3monitoring_domain_model_extension');
+                $relationId = $connection->lastInsertId();
             }
             $fields = ['uid_local', 'uid_foreign', 'title', 'state', 'is_loaded'];
             $relationsToBeAdded[] = [
@@ -321,7 +321,7 @@ class ClientImport extends BaseImport
         ];
 
         $connection->insert('tx_t3monitoring_domain_model_core', $insert);
-        $newId = (int)$connection->lastInsertId('tx_t3monitoring_domain_model_core');
+        $newId = (int)$connection->lastInsertId();
         $this->coreVersions[$version] = ['uid' => $newId, 'version' => $version];
 
         return $newId;
