@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     't3monitoring' => [
-        'parent' => 'tools',
+        'parent' => 'system',
         'position' => ['top'],
         'access' => 'user',
         'icon' => 'EXT:t3monitoring/Resources/Public/Icons/module.svg',
