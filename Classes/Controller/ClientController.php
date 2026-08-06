@@ -21,7 +21,7 @@ use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
 #[AsController]
 class ClientController extends BaseController
 {
-    #[IgnoreValidation([])]
+    #[IgnoreValidation(['argumentName' => 'client'])]
     public function showAction(?Client $client = null): ResponseInterface
     {
         if ($client === null) {
@@ -36,7 +36,7 @@ class ClientController extends BaseController
         return $this->htmlResponse();
     }
 
-    #[IgnoreValidation([])]
+    #[IgnoreValidation(['argumentName' => 'client'])]
     public function fetchAction(?Client $client = null): ResponseInterface
     {
         if ($client === null) {
