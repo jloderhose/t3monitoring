@@ -35,28 +35,28 @@ class BaseController extends ActionController
 
     public function __construct(
         private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        private readonly PageRenderer $pageRenderer,
+        private readonly \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilderBe,
         protected StatisticRepository $statisticRepository,
         protected ClientRepository $clientRepository,
         protected CoreRepository $coreRepository,
         protected IconFactory $iconFactory,
         protected Registry $registry,
-        protected EmMonitoringConfiguration $emConfiguration
+        protected EmMonitoringConfiguration $emConfiguration,
     ) {}
 
     protected function initializeAction(): void
     {
         parent::initializeAction();
 
-        /** @var PageRenderer $pageRenderer */
-        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $fullJsPath = PathUtility::getAbsoluteWebPath(
             GeneralUtility::getFileAbsFileName('EXT:t3monitoring/Resources/Public/JavaScript')
         );
-        $pageRenderer->addJsFile($fullJsPath . '/jquery-3.7.1.slim.min.js');
-        $pageRenderer->addJsFile($fullJsPath . '/datatables.min.js');
-        $pageRenderer->loadJavaScriptModule('@t3monitor/t3monitoring/Main.js');
-        $pageRenderer->addCssFile('EXT:t3monitoring/Resources/Public/Css/t3monitoring.css');
-        $pageRenderer->addCssFile('EXT:t3monitoring/Resources/Public/Css/datatables.min.css');
+        $this->pageRenderer->addJsFile($fullJsPath . '/jquery-3.7.1.slim.min.js');
+        $this->pageRenderer->addJsFile($fullJsPath . '/datatables.min.js');
+        $this->pageRenderer->loadJavaScriptModule('@t3monitor/t3monitoring/Main.js');
+        $this->pageRenderer->addCssFile('EXT:t3monitoring/Resources/Public/Css/t3monitoring.css');
+        $this->pageRenderer->addCssFile('EXT:t3monitoring/Resources/Public/Css/datatables.min.css');
     }
 
     protected function initializeView(): void
@@ -128,16 +128,14 @@ class BaseController extends ActionController
             $buttonBar->addButton($viewButton);
         }
 
-        $uriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-
         // Buttons for new records
-        $returnUrl = rawurlencode((string)$uriBuilder->buildUriFromRoute('t3monitoring', $this->request->getQueryParams()));
+        $returnUrl = rawurlencode((string)$this->uriBuilderBe->buildUriFromRoute('t3monitoring', $this->request->getQueryParams()));
         $pid = $this->emConfiguration->getPid();
 
         // new client
         $parameters = GeneralUtility::explodeUrl2Array('edit[tx_t3monitoring_domain_model_client][' . $pid . ']=new&returnUrl=' . $returnUrl);
         $addUserGroupButton = $buttonBar->makeLinkButton()
-            ->setHref((string)$uriBuilder->buildUriFromRoute('record_edit', $parameters))
+            ->setHref((string)$this->uriBuilderBe->buildUriFromRoute('record_edit', $parameters))
             ->setTitle($this->getLabel('createNew.client'))
             ->setIcon($this->iconFactory->getIcon('actions-document-new', IconSize::SMALL));
         $buttonBar->addButton($addUserGroupButton);
@@ -151,7 +149,7 @@ class BaseController extends ActionController
             $clientId = (int)$arguments['client'];
             $parameters = GeneralUtility::explodeUrl2Array('edit[tx_t3monitoring_domain_model_client][' . $clientId . ']=edit&returnUrl=' . $returnUrl);
             $editClientButton = $buttonBar->makeLinkButton()
-                ->setHref((string)$uriBuilder->buildUriFromRoute('record_edit', $parameters))
+                ->setHref((string)$this->uriBuilderBe->buildUriFromRoute('record_edit', $parameters))
                 ->setTitle($this->getLabel('edit.client'))
                 ->setIcon($this->iconFactory->getIcon('actions-open', IconSize::SMALL));
             $buttonBar->addButton($editClientButton);
@@ -172,10 +170,9 @@ class BaseController extends ActionController
 
     protected function getUriBuilder(): UriBuilder
     {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
+        $this->uriBuilder->setRequest($this->request);
 
-        return $uriBuilder;
+        return $this->uriBuilder;
     }
 
     protected function getClientFilterDemand(): ClientFilterDemand

@@ -418,7 +418,10 @@ class Client extends AbstractEntity
     public function getExtraDangerAsArray(): array
     {
         if (!empty($this->extraDanger)) {
-            return json_decode($this->extraDanger, true);
+            $decoded = json_decode($this->extraDanger, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
         }
         return [];
     }

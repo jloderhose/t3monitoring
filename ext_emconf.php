@@ -7,7 +7,7 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Georg Ringer',
     'author_email' => '',
     'state' => 'stable',
-    'version' => '3.1.0',
+    'version' => '4.0.0',
     'constraints' => [
         'depends' => [
             'php' => '8.2.0-8.5.99',
@@ -15,10 +15,5 @@ $EM_CONF[$_EXTKEY] = [
         ],
         'conflicts' => [],
         'suggests' => [],
-    ],
-    'autoload' => [
-        'psr-4' => [
-            'T3Monitor\\T3monitoring\\' => 'Classes',
-        ],
     ],
 ];
