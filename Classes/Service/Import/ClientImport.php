@@ -78,7 +78,7 @@ class ClientImport extends BaseImport
     {
         try {
             $response = $this->requestClientData($row);
-            if (empty($response)) {
+            if ($response === '') {
                 throw new RuntimeException('Empty response from client ' . $row['title'], 8032800951);
             }
             $json = json_decode($response, true);
@@ -100,6 +100,7 @@ class ClientImport extends BaseImport
                 'error_count' => 0,
             ];
 
+            /** @var ImportClientDataEvent $event */
             $event = $this->eventDispatcher->dispatch(
                 new ImportClientDataEvent($json, $row, $update)
             );
@@ -155,7 +156,7 @@ class ClientImport extends BaseImport
         );
     }
 
-    protected function requestClientData(array $row)
+    protected function requestClientData(array $row): string
     {
         $domain = $this->unifyDomain($row['domain']);
         $url = $domain . '/index.php?eID=t3monitoring&secret=' . rawurlencode($row['secret']);
@@ -183,10 +184,10 @@ class ClientImport extends BaseImport
             throw new RuntimeException($response->getReasonPhrase(), 6693843014);
         }
         if (in_array($response->getStatusCode(), [ 200, 301, 302 ], true)) {
-            $response = $response->getBody()->getContents();
+            return $response->getBody()->getContents();
         }
 
-        return $response;
+        return '';
     }
 
     protected function unifyDomain(string $domain): string
@@ -256,7 +257,7 @@ class ClientImport extends BaseImport
                     'description' => $data['description'] ?? '',
                     'author_name' => $data['author'] ?? '',
                     'state' => $state,
-                    'category' => (int)array_search($category, Extension::$defaultCategories),
+                    'category' => (int)array_search($category, Extension::$defaultCategories, true),
                     'is_official' => 0,
                     'tstamp' => $now,
                     'update_comment' => '',

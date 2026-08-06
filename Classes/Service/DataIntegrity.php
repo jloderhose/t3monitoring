@@ -236,11 +236,9 @@ readonly class DataIntegrity
         $qb->update($table)
             ->set('is_used', 0)
             ->executeStatement();
-        if (!empty($coreRows)) {
-            foreach ($coreRows as $id => $row) {
-                $qb->where('uid = ' . $id);
-                $qb->set('is_used', 1)->executeStatement();
-            }
+        foreach (array_keys($coreRows) as $id) {
+            $qb->where('uid = ' . $id);
+            $qb->set('is_used', 1)->executeStatement();
         }
     }
 

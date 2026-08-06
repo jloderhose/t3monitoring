@@ -14,12 +14,9 @@ namespace T3Monitor\T3monitoring\Domain\Repository;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
-class StatisticRepository extends BaseRepository
+readonly class StatisticRepository
 {
-    public function __construct(private readonly ConnectionPool $connectionPool)
-    {
-        parent::__construct();
-    }
+    public function __construct(private ConnectionPool $connectionPool) {}
 
     public function getUsedCoreVersionCount(): array
     {

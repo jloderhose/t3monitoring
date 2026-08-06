@@ -73,7 +73,7 @@ class EmailNotification implements LoggerAwareInterface
         }
     }
 
-    public function sendClientFailedEmail(array $clients, string $emailAddress, $subject = 'Monitoring Client Connection Failure'): void
+    public function sendClientFailedEmail(array $clients, string $emailAddress, string $subject = 'Monitoring Client Connection Failure'): void
     {
         if (empty($emailAddress)) {
             return;
