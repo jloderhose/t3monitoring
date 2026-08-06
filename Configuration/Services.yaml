@@ -11,7 +11,7 @@ services:
   T3Monitor\T3monitoring\Domain\Model\Dto\EmMonitoringConfiguration:
     public: true
 
-  T3Monitor\T3monitoring\Service\Import:
+  T3Monitor\T3monitoring\Service\Import\:
     resource: '../Classes/Service/Import/*'
     public: true
 
